@@ -40,7 +40,6 @@ function coinChangeRecursive(S, n, N, lookup) {
   } else {
     const key = n + "|" + N;
     if (!(key in lookup)) {
-      count++;
       const include = coinChangeRecursive(S, n, N - S[n], lookup);
       const exclude = coinChangeRecursive(S, n - 1, N, lookup);
       lookup[key] = include + exclude;
@@ -51,10 +50,14 @@ function coinChangeRecursive(S, n, N, lookup) {
 }
 
 const S = [1, 2, 3];
-const n = S.length - 1; //  number of sub problems per recursion
-const N = 4; // height of recursive tree
+const n = S.length - 1;
+const N = 4;
 const lookup = {};
 console.log(coinChangeRecursive(S, n, N, lookup));
+
+
+
+
 
 
 function coinChangeIterative(S, N) {

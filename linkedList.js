@@ -1,72 +1,90 @@
-// Singly linked list
+// Doubly linked linked with head and tail
 
 class Node {
-  constructor(data, next) {
+  constructor(data, next, prev) {
     this.data = data;
     this.next = next;
+    this.prev = prev;
   }
 }
 
+ 
 class LinkedList {
   constructor() {
-    this.head = null;
-    this.tail = null;
+    this.head = undefined;
+    this.tail = undefined;
   }
 
   add(data) {
-    if (!this.head) {
+    if (this.head === undefined) {
       this.head = new Node(data);
       this.tail = this.head;
+ 
     } else {
-      let node = new Node(data);
+      const node = new Node(data);
       this.tail.next = node;
+      node.prev = this.tail;
       this.tail = this.tail.next;
     }
   }
 
-  remove(value) {
-    if (!value) return null;
-    else if (!this.head) return null;
-    else if (!this.head.next.next) {
-      let node;
-      if (this.head.data === value) {
-        node = this.head;
+  remove(data) {
+    let itr = this.head;
+    
+    while (itr.data !== data && itr !== null) {
+      itr = itr.next;
+    }
+
+    if (itr === this.head) {
+      if (this.tail === this.head) {
+        delete this;
+  
+      } else {
         this.head = this.head.next;
-        node = null;
-        node = null;
-      } else if (this.head.next.data === value) {
-        node = this.head.next;
-        node = null;
-        this.head.next = null;
+        delete this.head.prev;
       }
+  
+    } else if (itr === this.tail) {
+      this.tail = this.tail.prev;
+      delete this.tail.next;
+  
     } else {
-      let slow = this.head;
-      let fast = this.head.next;
-      while (fast) {
-        if (slow.data === value) {
-          this.head = slow.next;
-          return slow = null;
-        } else if (fast.data === value) {
-          slow.next = fast.next;
-          return fast = null;
-        } else {
-          fast = fast.next;
-          slow = slow.next;
-        }
+      const node = itr.next;
+      itr = itr.prev;
+      delete itr.next;
+      itr.next = node;
+      node.prev = itr;
+    }
+  }
+
+  read(direction) {
+    let itr = undefined;
+    const answer = [];
+    
+    if (direction === "forward") {
+      itr = list.head;
+    } else {
+      itr = list.tail;
+    }
+
+    while (itr) {
+      answer.push(itr.data);
+      if (direction === "forward") {
+        itr = itr.next;
+      } else {
+        itr = itr.prev;
       }
     }
+
+    console.log(answer);
   }
 }
 
+
 const list = new LinkedList;
+const integers = [1, 2, 3, 4];
+integers.forEach(integer => list.add(integer));
 
-list.add(1);
-list.add(2);
-list.add(3);
-list.add(4);
-list.add(5);
-
-
-list.remove(4);
-
-console.log(list.head.next.next.next.data);
+list.read("forward");
+list.remove(1);
+list.read("forward");
